@@ -19,7 +19,7 @@ def openDrawer(mysock,size):
         if (data == "admin-command-kill-server 42".encode() or data == "admin-command-kill-server 42\n".encode()):
             tooCrusty(conn)
             return 'exit'
-        match = re.match(r'^command: run station (.{1,})$',data.decode().rstrip())
+        match = re.search(r'^command: run station (.{1,})$',data.decode().rstrip())
         if match:
             conn.send("".join(["Recieved Special Command To Launch: ",match.group(1),"\n"]).encode())
         else:
