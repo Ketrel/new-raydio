@@ -48,7 +48,12 @@ def closeConnection(oldSock):
     oldSock.close()
 
 def raydioStart(station):
-    command="/usr/bin/liquidsoap /stationScripts/"+shlex.quote(station)
+    match = re.search(r"^[a-zA-Z0-9_-]+$",station)
+    if not match:
+        #This shouldn't ever happen since the regex that passes checks
+        # to call this function should catch it, but just to be safe...
+        return("Command Contains Invalid Characers")
+    command="/usr/bin/liquidsoap /stationScripts/"+station
     return("Returnning before doing anything\nWhen Live, Would Run: '"+command+"'")
     command=shlex.split(command)
     #try:
@@ -69,9 +74,9 @@ sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 sock.bind((TCP_IP,TCP_PORT))
 sock.listen(1)
 
-
+#acks-42 = admin-command-kill-server-42
 regs=(
-        re.compile(r'^c: run (.{1,})\n?$'),
+        re.compile(r'^c: run ([a-zA-Z0-9_-]+)\n?$'),
         re.compile(r'^acks-42\n?$'),
      )
 
