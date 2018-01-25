@@ -48,9 +48,9 @@ def closeConnection(oldSock):
     oldSock.close()
 
 def raydioStart(station):
-    command="ls -l "+shlex.quote(station)
+    command="/usr/bin/liquidsoap /stationScripts/"+shlex.quote(station)
+    return("Returnning before doing anything\nWhen Live, Would Run: '"+command+"'")
     command=shlex.split(command)
-    return("Returnning before doing anything")
     #try:
     #    p = subprocess.Popen(command,shell=False,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL)
     #    output = p.communicate()[0]
