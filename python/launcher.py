@@ -6,7 +6,7 @@ import socket
 import re
 import shlex
 
-def openDrawer(mysock,size):
+def openConnection(mysock,size):
     conn, addr = mysock.accept()
     conn.settimeout(30)
     while True:
@@ -14,31 +14,29 @@ def openDrawer(mysock,size):
             data = conn.recv(size)
         except socket.timeout:
             print("Connection Closed Due To Timeout")
-            tooCrusty(conn)
+            closeConnection(conn)
             return None
         if not data:
             break
-        if (data == "admin-command-kill-server 42".encode() or data == "admin-command-kill-server 42\n".encode()):
-            tooCrusty(conn)
+        if (data == "acks-42".encode() or data == "acks-42\n".encode()):
+            closeConnection(conn)
             return 'exit'
-        match = re.search(r'^command: run station (.{1,})$',data.decode().rstrip())
+        match = re.search(r'^c: run station (.{1,})$',data.decode().rstrip())
         if match:
-            #conn.send("".join(["Recieved Special Command To Launch: ",match.group(1),"\n"]).encode())
             ret=raydioStart(match.group(1))
             print(ret)
-            conn.send(ret.encode()[:1024])
+            conn.send((ret+"\n").encode()[:1024])
         else:
-            print("".join(["Received: ",data.decode('utf-8').rstrip()]))
-            conn.send("".join(["Received: ",data.decode('utf-8')]).encode())
-    tooCrusty(conn)
+            print("Received: "+data.decode().rstrip())
+            conn.send(("Received: "+data.decode()).encode())
+    closeConnection(conn)
     print("Connect Closed")
     return None
-def tooCrusty(oldSock):
+def closeConnection(oldSock):
     oldSock.shutdown(socket.SHUT_RD)
     oldSock.close()
 def raydioStart(station):
-    #do something
-    command="".join(["ls -l ",shlex.quote(station)])
+    command="ls -l "+shlex.quote(station)
     command=shlex.split(command)
     return("Returnning before doing anything")
     try:
@@ -61,8 +59,8 @@ sock.bind((TCP_IP,TCP_PORT))
 sock.listen(1)
 
 while True:
-    ret = openDrawer(sock,BUFFER_SIZE)
+    ret = openConnection(sock,BUFFER_SIZE)
     if ret == 'exit':
         break
-tooCrusty(sock)
+closeConnection(sock)
 print("Socket Closed")
