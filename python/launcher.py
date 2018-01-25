@@ -32,7 +32,6 @@ def openConnection(mysock,size,regs):
                     ret=raydioStart(match.group(1))
                     print(ret)
                     conn.send((ret+"\n").encode()[:1024])
-                    break;
                 elif matchedKey == 1:
                     closeConnection(conn)
                     return 'exit'

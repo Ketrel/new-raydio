@@ -16,4 +16,4 @@ RUN touch ~/.profile && \
     rm /usr/bin/whoami && \
     ln -s /bin/busybox /usr/bin/whoami
 
-COPY ../python/launcher.py /launcher.py
+COPY ./python/launcher.py /launcher.py
