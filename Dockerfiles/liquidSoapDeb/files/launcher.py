@@ -51,11 +51,11 @@ def openConnection(mysock,size,regs):
                         break;
                 if matched:
                     if matchedKey == 0:
+                        return 'exit'
+                    elif matchedKey == 1:
                         ret=raydioStart(match.group(1))
                         print(ret)
                         conn.send((ret+"\n").encode()[:1024])
-                    elif matchedKey == 1:
-                        return 'exit'
                 else:
                     print("Received: "+data.decode().rstrip())
                     conn.send(("Received: "+data.decode()).encode())
@@ -90,8 +90,8 @@ with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sock:
 
     #acks-42 = admin-command-kill-server-42
     regs=(
-            re.compile(r'^c: run ([a-zA-Z0-9_-]+)\n?$'),
-            re.compile(r'^acks-42\n?$'),
+            re.compile(r'^ac:ks-42\n?$'),
+            re.compile(r'^c:run ([a-zA-Z0-9_-]+)\n?$'),
          )
     while True:
         ret = openConnection(sock,BUFFER_SIZE,regs)

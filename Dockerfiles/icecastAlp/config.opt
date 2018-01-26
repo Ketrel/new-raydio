@@ -1,0 +1,8 @@
+location='Aperture Labs'
+adminEmail='admin@aperturelabs'
+listenPort=10070
+maxSources=5
+sourcePassword='str3@mpass'
+relayPassword='sflkjk4$TDFD@fd3352'
+adminUser='nondefaultadmin'
+adminPassword='ASDF$dsdfs$$dsfdfejldf'
